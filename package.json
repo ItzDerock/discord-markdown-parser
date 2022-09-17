@@ -2,20 +2,27 @@
   "name": "discord-markdown-parser",
   "version": "1.0.0",
   "description": "Parse discord-style markdown into an abstract syntax tree.",
-  "main": "index.js",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "homepage": "https://github.com/ItzDerock/discord-markdown-parser",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ItzDerock/discord-markdown-parser"
+  },
   "scripts": {
-    "prepare": "tsc",
-    "build": "tsc",
-    "start": "ts-node src/index.ts"
+    "build": "tsc"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "husky": {
-    "hooks": {
-      "pre-commit": "pretty-quick --staged"
-    }
-  },
+  "keywords": [
+    "discord",
+    "markdown",
+    "parser",
+    "discord-markdown-parser",
+    "discord-markdown",
+    "simple-markdown",
+    "discord-parser"
+  ],
+  "author": "Derock <derock@derock.dev>",
+  "license": "GNU GPLv3",
   "devDependencies": {
     "@types/node": "^18.7.13",
     "ts-node": "^10.9.1",
