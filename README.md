@@ -3,6 +3,7 @@
 [![npm](https://img.shields.io/npm/dw/discord-markdown-parser)](http://npmjs.org/package/discord-markdown-parser)
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/ItzDerock/discord-markdown-parser)
 ![GitHub Repo stars](https://img.shields.io/github/stars/ItzDerock/discord-markdown-parser?style=social)
+
 A node.js markdown implementation based on the [simple-markdown](https://github.com/Khan/simple-markdown) library, which is the same technology [discord use](https://discord.com/blog/how-discord-renders-rich-messages-on-the-android-app).
 
 Designed to be used for [discord-html-transcripts](https://github.com/ItzDerock/discord-html-transcripts)
