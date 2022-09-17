@@ -24,12 +24,11 @@ export const rules = {
     codeBlock,
     newline: SimpleMarkdown.defaultRules.newline,
     escape: SimpleMarkdown.defaultRules.escape,
-    underline: SimpleMarkdown.defaultRules.underline,
     autolink,
     url,
     em,
     strong: SimpleMarkdown.defaultRules.strong,
-    u: SimpleMarkdown.defaultRules.u,
+    underline: SimpleMarkdown.defaultRules.u,
     strikethrough,
     inlineCode: SimpleMarkdown.defaultRules.inlineCode,
     text,
@@ -58,8 +57,8 @@ const parserExtended = SimpleMarkdown.parserFor(rulesExtended);
 
 // parse function
 export function parse(input: string, type: 'normal' | 'extended' = 'normal') {
-    if (type === 'normal') return parser(input);
-    else return parserExtended(input);
+    if (type === 'normal') return parser(input, { inline: true });
+    else return parserExtended(input, { inline: true });
 }
 
 export default parse;
