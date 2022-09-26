@@ -1,6 +1,10 @@
 import SimpleMarkdown from 'simple-markdown';
-import { extend } from "../utils/extend";
+import { extend } from '../utils/extend';
+import { TextRegex } from '../utils/regex';
 
-export const text = extend({
-    match: source => /^[\s\S]+?(?=[^0-9A-Za-z\s\u00c0-\uffff-]|\n\n|\n|\w+:\S|$)/.exec(source),
-}, SimpleMarkdown.defaultRules.text);
+export const text = extend(
+    {
+        match: (source) => TextRegex.exec(source),
+    },
+    SimpleMarkdown.defaultRules.text
+);

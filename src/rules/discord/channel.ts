@@ -1,11 +1,12 @@
 import SimpleMarkdown from 'simple-markdown';
+import { ChannelMentionRegex } from '../../utils/regex';
 
 export const channel: SimpleMarkdown.ParserRule = {
     order: SimpleMarkdown.defaultRules.strong.order,
-    match: source => /^<#?([0-9]*)>/.exec(source),
-    parse: function(capture) {
+    match: (source) => ChannelMentionRegex.exec(source),
+    parse: function (capture) {
         return {
-            id: capture[1]
+            id: capture[1],
         };
-    }
-}
+    },
+};

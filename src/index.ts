@@ -42,14 +42,14 @@ export const rules = {
     role,
     emoji,
     everyone,
-    here
+    here,
 };
 
 // for use in webhooks, embeds, etc
 export const rulesExtended = {
     ...rules,
-    link: SimpleMarkdown.defaultRules.link
-}
+    link: SimpleMarkdown.defaultRules.link,
+};
 
 // build the parser
 const parser = SimpleMarkdown.parserFor(rules);
