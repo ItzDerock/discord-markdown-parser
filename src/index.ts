@@ -12,6 +12,7 @@ import { autolink } from './rules/autolink';
 import { here } from './rules/discord/here';
 import { emoticon } from './rules/emoticon';
 import { user } from './rules/discord/user';
+import { twemoji } from './rules/discord/twemoji';
 import { spoiler } from './rules/spoiler';
 import { text } from './rules/text';
 import { url } from './rules/url';
@@ -43,6 +44,7 @@ export const rules = {
   emoji,
   everyone,
   here,
+  twemoji,
 };
 
 // for use in webhooks, embeds, etc
@@ -65,3 +67,4 @@ export default parse;
 
 // some types
 export type RuleTypes = keyof typeof rules;
+export type RuleTypesExtended = keyof typeof rulesExtended;
