@@ -52,7 +52,7 @@ const { default: regexFromWeb } = await importFileFromWeb({
   temporaryFileName: 'regex.mjs',
 });
 
-const nonGlobalRegex = new RegExp(`(${regexFromWeb.source})`, '');
+const nonGlobalRegex = new RegExp(`^(${regexFromWeb.source})`, '');
 
 const writePromises = [
   //
