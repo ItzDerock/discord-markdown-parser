@@ -20,35 +20,35 @@ import { br } from './rules/br';
 
 // rules normal users can use
 export const rules = {
-    blockQuote,
-    codeBlock,
-    newline: SimpleMarkdown.defaultRules.newline,
-    escape: SimpleMarkdown.defaultRules.escape,
-    autolink,
-    url,
-    em,
-    strong: SimpleMarkdown.defaultRules.strong,
-    underline: SimpleMarkdown.defaultRules.u,
-    strikethrough,
-    inlineCode: SimpleMarkdown.defaultRules.inlineCode,
-    text,
-    emoticon,
-    br,
-    spoiler,
+  blockQuote,
+  codeBlock,
+  newline: SimpleMarkdown.defaultRules.newline,
+  escape: SimpleMarkdown.defaultRules.escape,
+  autolink,
+  url,
+  em,
+  strong: SimpleMarkdown.defaultRules.strong,
+  underline: SimpleMarkdown.defaultRules.u,
+  strikethrough,
+  inlineCode: SimpleMarkdown.defaultRules.inlineCode,
+  text,
+  emoticon,
+  br,
+  spoiler,
 
-    // discord specific
-    user,
-    channel,
-    role,
-    emoji,
-    everyone,
-    here,
+  // discord specific
+  user,
+  channel,
+  role,
+  emoji,
+  everyone,
+  here,
 };
 
 // for use in webhooks, embeds, etc
 export const rulesExtended = {
-    ...rules,
-    link: SimpleMarkdown.defaultRules.link,
+  ...rules,
+  link: SimpleMarkdown.defaultRules.link,
 };
 
 // build the parser
@@ -57,8 +57,8 @@ const parserExtended = SimpleMarkdown.parserFor(rulesExtended);
 
 // parse function
 export function parse(input: string, type: 'normal' | 'extended' = 'normal') {
-    if (type === 'normal') return parser(input, { inline: true });
-    else return parserExtended(input, { inline: true });
+  if (type === 'normal') return parser(input, { inline: true });
+  else return parserExtended(input, { inline: true });
 }
 
 export default parse;

@@ -4,6 +4,5 @@
     "quoteProps": "as-needed",
     "trailingComma": "es5",
     "endOfLine": "lf",
-    "singleQuote": true,
-    "tabWidth": 4
+    "singleQuote": true
 }
