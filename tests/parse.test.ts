@@ -74,4 +74,18 @@ describe('Parse', () => {
       },
     ]);
   });
+
+  test('GIVEN a string with a timestamp THEN parse the timestamp', () => {
+    expect(parse('Hello it is currently <t:1664298780:R>')).toEqual([
+      {
+        type: 'text',
+        content: 'Hello it is currently ',
+      },
+      {
+        type: 'timestamp',
+        timestamp: '1664298780',
+        format: 'R',
+      },
+    ])
+  })
 });

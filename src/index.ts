@@ -2,7 +2,9 @@ import SimpleMarkdown from 'simple-markdown';
 
 // import all the rules
 import { everyone } from './rules/discord/everyone';
+import { twemoji } from './rules/discord/twemoji';
 import { channel } from './rules/discord/channel';
+import { timestamp } from './rules/discord/time';
 import { blockQuote } from './rules/blockQuote';
 import { strikethrough } from './rules/strike';
 import { codeBlock } from './rules/codeBlock';
@@ -12,7 +14,6 @@ import { autolink } from './rules/autolink';
 import { here } from './rules/discord/here';
 import { emoticon } from './rules/emoticon';
 import { user } from './rules/discord/user';
-import { twemoji } from './rules/discord/twemoji';
 import { spoiler } from './rules/spoiler';
 import { text } from './rules/text';
 import { url } from './rules/url';
@@ -45,6 +46,7 @@ export const rules = {
   everyone,
   here,
   twemoji,
+  timestamp
 };
 
 // for use in webhooks, embeds, etc

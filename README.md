@@ -18,6 +18,7 @@ Designed to be used for [discord-html-transcripts](https://github.com/ItzDerock/
 -   inline code
 -   italics (em)
 -   spoilers
+-   timestamps
 -   bold
 -   strikethrough
 -   underline
@@ -27,7 +28,7 @@ Designed to be used for [discord-html-transcripts](https://github.com/ItzDerock/
 -   @everyone
 -   @here
 -   emojis
-    & more
+-   & more
 
 ## Usage
 
