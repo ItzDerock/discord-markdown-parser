@@ -46,7 +46,7 @@ export const rules = {
   everyone,
   here,
   twemoji,
-  timestamp
+  timestamp,
 };
 
 // for use in webhooks, embeds, etc

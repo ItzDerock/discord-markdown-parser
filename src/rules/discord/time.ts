@@ -9,5 +9,5 @@ export const timestamp: SimpleMarkdown.ParserRule = {
       timestamp: capture[1],
       format: capture[2],
     };
-  }
-}
+  },
+};
