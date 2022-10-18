@@ -17,8 +17,8 @@ jobs:
         uses: actions/setup-node@2fddd8803e2f5c9604345a0b591c3020ee971a93 # tag=v3
         with:
           node-version: 18
-          cache: yarn
-          registry-url: https://registry.yarnpkg.com/
+          cache: npm
+          cache-dependency-path: './package-lock.json'
       - name: Install Dependencies
         run: npm install
       - name: Run updater
