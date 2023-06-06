@@ -6,9 +6,9 @@ export const RoleMentionRegex = /^<@&(\d{17,20})>/;
 
 export const UserMentionRegex = /^<@!?(\d{17,20})>/;
 
-export const EveryoneRegex = /^@everyone$/;
+export const EveryoneRegex = /^@everyone/;
 
-export const HereRegex = /^@here$/;
+export const HereRegex = /^@here/;
 
 export const BlockQuoteRegex = /^( *>>> ([\s\S]*))|^( *> [^\n]*(\n *> [^\n]*)*\n?)/;
 
