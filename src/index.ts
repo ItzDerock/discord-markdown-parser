@@ -15,6 +15,7 @@ import { here } from './rules/discord/here';
 import { emoticon } from './rules/emoticon';
 import { user } from './rules/discord/user';
 import { spoiler } from './rules/spoiler';
+import { heading } from './rules/heading';
 import { text } from './rules/text';
 import { url } from './rules/url';
 import { em } from './rules/em';
@@ -37,6 +38,7 @@ export const rules = {
   emoticon,
   br,
   spoiler,
+  heading,
 
   // discord specific
   user,

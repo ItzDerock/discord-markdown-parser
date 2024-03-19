@@ -325,4 +325,82 @@ describe('Parse', () => {
       },
     ]);
   })
+
+  test('GIVEN a header with 1-3 "#" signs THEN parse the header', () => {
+    expect(parse('# Header')).toEqual([
+      {
+        type: 'heading',
+        level: 1,
+        content: [{
+          type: 'text',
+          content: 'Header',
+        }],
+      },
+    ]);
+    expect(parse('## Header')).toEqual([
+      {
+        type: 'heading',
+        level: 2,
+        content: [{
+          type: 'text',
+          content: 'Header',
+        }],
+      },
+    ]);
+    expect(parse('### Header')).toEqual([
+      {
+        type: 'heading',
+        level: 3,
+        content: [{
+          type: 'text',
+          content: 'Header',
+        }],
+      },
+    ]);
+    expect(parse('#### Header')).toEqual([
+      {
+        type: 'text',
+        content: '#',
+      },
+      {
+        type: 'text',
+        content: '#',
+      },
+      {
+        type: 'text',
+        content: '#',
+      },
+      {
+        type: 'text',
+        content: '# Header',
+      },
+    ]);
+    expect(parse('This is # Not a header')).toEqual([
+      {
+        type: 'text',
+        content: 'This is ',
+      },
+      {
+        type: 'text',
+        content: '# Not a header',
+      },
+    ]);
+    expect(parse('This is \n# A header')).toEqual([
+      {
+        type: 'text',
+        content: 'This is ',
+      },
+      {
+        type: 'br',
+      },
+      {
+        type: 'heading',
+        level: 1,
+        content: [{
+          type: 'text',
+          content: 'A header',
+        }],
+      },
+    ]);
+  })
 });
