@@ -86,8 +86,22 @@ describe('Parse', () => {
         timestamp: '1664298780',
         format: 'R',
       },
-    ])
-  })
+    ]);
+  });
+
+  test('GIVEN a string with a pre-epoch timestamp THEN parse the pre-epoch timestamp', () => {
+    expect(parse('The 20th century started in <t:-2177452800:F>')).toEqual([
+      {
+        type: 'text',
+        content: 'The 20th century started in ',
+      },
+      {
+        type: 'timestamp',
+        timestamp: '-2177452800',
+        format: 'F',
+      },
+    ]);
+  });
 
   test('GIVEN a string with a role THEN parse the role', () => {
     expect(parse('Hello <@&123456789123456780>')).toEqual([
@@ -100,7 +114,7 @@ describe('Parse', () => {
         id: '123456789123456780',
       },
     ]);
-  })
+  });
 
   test('GIVEN a string with a channel THEN parse the channel', () => {
     expect(parse('See <#123456789123456780>')).toEqual([
@@ -113,7 +127,7 @@ describe('Parse', () => {
         id: '123456789123456780',
       },
     ]);
-  })
+  });
 
   test('GIVEN a string with a link THEN parse the link', () => {
     expect(parse('See https://google.com')).toEqual([
@@ -124,13 +138,15 @@ describe('Parse', () => {
       {
         type: 'url',
         target: 'https://google.com',
-        content: [{
-          type: 'text',
-          content: 'https://google.com',
-        }]
+        content: [
+          {
+            type: 'text',
+            content: 'https://google.com',
+          },
+        ],
       },
     ]);
-  })
+  });
 
   test('GIVEN a string with a masked link without extended md support THEN do not parse as masked link', () => {
     expect(parse('See [google](https://google.com)')).toEqual([
@@ -140,30 +156,32 @@ describe('Parse', () => {
       },
       {
         type: 'text',
-        content: '[google'
+        content: '[google',
       },
       {
         type: 'text',
-        content: ']'
+        content: ']',
       },
       {
         type: 'text',
-        content: '('
+        content: '(',
       },
       {
         type: 'url',
         target: 'https://google.com',
-        content: [{
-          type: 'text',
-          content: 'https://google.com',
-        }]
+        content: [
+          {
+            type: 'text',
+            content: 'https://google.com',
+          },
+        ],
       },
       {
         type: 'text',
-        content: ')'
+        content: ')',
       },
     ]);
-  })
+  });
 
   test('GIVEN a string with a masked link with extended md support THEN parse as masked link', () => {
     expect(parse('See [google](https://google.com)', 'extended')).toEqual([
@@ -175,13 +193,15 @@ describe('Parse', () => {
         type: 'link',
         title: undefined,
         target: 'https://google.com',
-        content: [{
-          type: 'text',
-          content: 'google',
-        }]
+        content: [
+          {
+            type: 'text',
+            content: 'google',
+          },
+        ],
       },
     ]);
-  })
+  });
 
   test('GIVEN a string with an autolink THEN parse the autolink', () => {
     expect(parse('See <https://google.com>')).toEqual([
@@ -192,13 +212,15 @@ describe('Parse', () => {
       {
         type: 'autolink',
         target: 'https://google.com',
-        content: [{
-          type: 'text',
-          content: 'https://google.com',
-        }]
+        content: [
+          {
+            type: 'text',
+            content: 'https://google.com',
+          },
+        ],
       },
     ]);
-  })
+  });
 
   test('GIVEN a string with a blockquote THEN parse the blockquote', () => {
     expect(parse('> Hello world!')).toEqual([
@@ -213,10 +235,10 @@ describe('Parse', () => {
             type: 'text',
             content: '!',
           },
-        ]
+        ],
       },
     ]);
-  })
+  });
 
   test('GIVEN a string with a multiline blockquote THEN parse the multiline blockquote', () => {
     expect(parse('>>> Hello world!\nLine 2')).toEqual([
@@ -238,10 +260,10 @@ describe('Parse', () => {
             type: 'text',
             content: 'Line 2',
           },
-        ]
+        ],
       },
     ]);
-  })
+  });
 
   test('GIVEN a string with a codeblock THEN parse the codeblock', () => {
     expect(parse('```js\nconst a = 1;\n```')).toEqual([
@@ -252,7 +274,7 @@ describe('Parse', () => {
         content: 'const a = 1;',
       },
     ]);
-  })
+  });
 
   test('GIVEN a string with em THEN parse the em', () => {
     expect(parse('*Hello world!*')).toEqual([
@@ -267,10 +289,10 @@ describe('Parse', () => {
             type: 'text',
             content: '!',
           },
-        ]
+        ],
       },
     ]);
-  })
+  });
 
   test('GIVEN a string with a spoiler THEN parse the spoiler', () => {
     expect(parse('Hello ||world||')).toEqual([
@@ -285,10 +307,10 @@ describe('Parse', () => {
             type: 'text',
             content: 'world',
           },
-        ]
+        ],
       },
     ]);
-  })
+  });
 
   test('GIVEN a @everyone mention THEN parse the @everyone mention', () => {
     expect(parse('Hello @everyone')).toEqual([
@@ -300,7 +322,7 @@ describe('Parse', () => {
         type: 'everyone',
       },
     ]);
-  })
+  });
 
   test('GIVEN a @here mention THEN parse the @here mention', () => {
     expect(parse('Hello @here')).toEqual([
@@ -312,7 +334,7 @@ describe('Parse', () => {
         type: 'here',
       },
     ]);
-  })
+  });
 
   // i have no idea why this is a thing
   // src/rules/emoticon.ts
@@ -324,37 +346,43 @@ describe('Parse', () => {
         content: '¯\\_(ツ)_/¯',
       },
     ]);
-  })
+  });
 
   test('GIVEN a header with 1-3 "#" signs THEN parse the header', () => {
     expect(parse('# Header')).toEqual([
       {
         type: 'heading',
         level: 1,
-        content: [{
-          type: 'text',
-          content: 'Header',
-        }],
+        content: [
+          {
+            type: 'text',
+            content: 'Header',
+          },
+        ],
       },
     ]);
     expect(parse('## Header')).toEqual([
       {
         type: 'heading',
         level: 2,
-        content: [{
-          type: 'text',
-          content: 'Header',
-        }],
+        content: [
+          {
+            type: 'text',
+            content: 'Header',
+          },
+        ],
       },
     ]);
     expect(parse('### Header')).toEqual([
       {
         type: 'heading',
         level: 3,
-        content: [{
-          type: 'text',
-          content: 'Header',
-        }],
+        content: [
+          {
+            type: 'text',
+            content: 'Header',
+          },
+        ],
       },
     ]);
     expect(parse('#### Header')).toEqual([
@@ -396,11 +424,13 @@ describe('Parse', () => {
       {
         type: 'heading',
         level: 1,
-        content: [{
-          type: 'text',
-          content: 'A header',
-        }],
+        content: [
+          {
+            type: 'text',
+            content: 'A header',
+          },
+        ],
       },
     ]);
-  })
+  });
 });
