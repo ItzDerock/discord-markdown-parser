@@ -12,15 +12,17 @@ jobs:
     if: github.repository_owner == 'ItzDerock'
     steps:
       - name: Checkout Project
-        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # tag=v3
-      - name: Use Node.js v18
-        uses: actions/setup-node@2fddd8803e2f5c9604345a0b591c3020ee971a93 # tag=v3
+        uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+      - name: Use Node.js v22
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
-          cache: npm
-          cache-dependency-path: './package-lock.json'
+          node-version: 22
+          cache: pnpm
+          registry-url: https://registry.npmjs.org/
       - name: Install Dependencies
-        run: npm install
+        run: pnpm install --frozen-lockfile
       - name: Run updater
         run: node --experimental-json-modules scripts/twemoji-regex-updater.mjs
       - name: Run prettier on the code

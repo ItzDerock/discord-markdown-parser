@@ -12,14 +12,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Project
-        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # tag=v3
-      - name: Use Node.js v16
-        uses: actions/setup-node@2fddd8803e2f5c9604345a0b591c3020ee971a93 # tag=v3
+        uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+      - name: Use Node.js v22
+        uses: actions/setup-node@v4
         with:
-          node-version: 16
-
+          node-version: 22
+          cache: pnpm
+          registry-url: https://registry.npmjs.org/
       - name: Install Dependencies
-        run: npm install
-
+        run: pnpm install --frozen-lockfile
       - name: Run Tests
-        run: npm test
+        run: pnpm test
+      - name: Run typecheck
+        run: pnpm run typecheck
+      - name: Run prettier check
+        run: pnpm run format:check

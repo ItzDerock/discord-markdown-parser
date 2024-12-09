@@ -12,6 +12,7 @@
   "scripts": {
     "build": "tsc -b src",
     "format": "prettier --write --cache \"{src,scripts,tests}/**/*.{mjs,ts,js}\"",
+    "format:check": "prettier --check --cache \"{src,scripts,tests}/**/*.{mjs,ts,js}\"",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "release": "npm run build && npm pack"
@@ -26,7 +27,7 @@
     "discord-parser"
   ],
   "author": "Derock <derock@derock.dev>",
-  "license": "GNU GPLv3",
+  "license": "Apache License",
   "devDependencies": {
     "@types/node": "^22.10.1",
     "@vitest/coverage-v8": "^2.1.8",
@@ -41,5 +42,5 @@
   "files": [
     "dist"
   ],
-  "packageManager": "pnpm@9.15.0+sha512.76e2379760a4328ec4415815bcd6628dee727af3779aaa4c914e3944156c4299921a89f976381ee107d41f12cfa4b66681ca9c718f0668fa0831ed4c6d8ba56c"
+  "packageManager": "pnpm@9.15.0"
 }
