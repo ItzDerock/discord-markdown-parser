@@ -222,6 +222,15 @@ describe('Parse', () => {
     ]);
   });
 
+  test('GIVEN a string with a inlineCode THEN parse the inlineCode', () => {
+    expect(parse('`Hello world!`')).toEqual([
+      {
+        type: 'inlineCode',
+        content: 'Hello world!',
+      },
+    ]);
+  });
+
   test('GIVEN a string with a blockquote THEN parse the blockquote', () => {
     expect(parse('> Hello world!')).toEqual([
       {
@@ -270,6 +279,17 @@ describe('Parse', () => {
       {
         type: 'codeBlock',
         lang: 'js',
+        inQuote: false,
+        content: 'const a = 1;',
+      },
+    ]);
+  });
+
+  test('GIVEN a string with a codeblock without lang THEN parse the codeblock', () => {
+    expect(parse('```\nconst a = 1;\n```')).toEqual([
+      {
+        type: 'codeBlock',
+        lang: '',
         inQuote: false,
         content: 'const a = 1;',
       },

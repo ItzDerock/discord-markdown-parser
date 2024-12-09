@@ -1,4 +1,4 @@
-import SimpleMarkdown from 'simple-markdown';
+import SimpleMarkdown from '@khanacademy/simple-markdown';
 import { extend } from '../utils/extend';
 import { CodeBlockRegex } from '../utils/regex';
 
