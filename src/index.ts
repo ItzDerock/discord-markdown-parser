@@ -1,4 +1,4 @@
-import SimpleMarkdown from 'simple-markdown';
+import SimpleMarkdown, { type ParserRule } from '@khanacademy/simple-markdown';
 
 // import all the rules
 import { everyone } from './rules/discord/everyone';
@@ -22,7 +22,7 @@ import { em } from './rules/em';
 import { br } from './rules/br';
 
 // rules normal users can use
-export const rules = {
+export const rules: Record<string, ParserRule> = {
   blockQuote,
   codeBlock,
   newline: SimpleMarkdown.defaultRules.newline,
@@ -52,7 +52,7 @@ export const rules = {
 };
 
 // for use in webhooks, embeds, etc
-export const rulesExtended = {
+export const rulesExtended: Record<string, ParserRule> = {
   ...rules,
   link: SimpleMarkdown.defaultRules.link,
 };

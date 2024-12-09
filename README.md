@@ -63,7 +63,7 @@ const newRules = {
 };
 
 // import simpleMarkdown
-import SimpleMarkdown from 'simple-markdown';
+import SimpleMarkdown from '@khanacademy/simple-markdown';
 
 // and create the parser
 const parser = SimpleMarkdown.parserFor(newRules);

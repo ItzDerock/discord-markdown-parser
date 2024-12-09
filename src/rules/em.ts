@@ -1,5 +1,5 @@
 import { extend } from '../utils/extend';
-import SimpleMarkdown from 'simple-markdown';
+import SimpleMarkdown from '@khanacademy/simple-markdown';
 
 export const em = extend(
   {

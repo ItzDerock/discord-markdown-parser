@@ -1,8 +1,8 @@
-import SimpleMarkdown from 'simple-markdown';
+import SimpleMarkdown, { type ParserRule } from '@khanacademy/simple-markdown';
 import { extend } from '../utils/extend';
 import { BlockQuoteRegex } from '../utils/regex';
 
-export const blockQuote: SimpleMarkdown.ParserRule = extend(
+export const blockQuote: ParserRule = extend(
   {
     match: function (source, state, prevSource) {
       return !/^$|\n *$/.test(prevSource) || state.inQuote ? null : BlockQuoteRegex.exec(source);

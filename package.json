@@ -11,8 +11,9 @@
   },
   "scripts": {
     "build": "tsc -b src",
-    "format": "prettier --write --cache \"{src,scripts}/**/*.{mjs,ts,js}\"",
+    "format": "prettier --write --cache \"{src,scripts,tests}/**/*.{mjs,ts,js}\"",
     "test": "vitest run",
+    "typecheck": "tsc --noEmit",
     "release": "npm run build && npm pack"
   },
   "keywords": [
@@ -27,18 +28,18 @@
   "author": "Derock <derock@derock.dev>",
   "license": "GNU GPLv3",
   "devDependencies": {
-    "@types/node": "^18.7.13",
-    "@vitest/coverage-c8": "^0.23.4",
-    "colorette": "^2.0.19",
-    "prettier": "^2.7.1",
-    "ts-node": "^10.9.1",
-    "typescript": "^4.8.2",
-    "vitest": "^0.23.4"
+    "@types/node": "^22.10.1",
+    "@vitest/coverage-v8": "^2.1.8",
+    "colorette": "^2.0.20",
+    "prettier": "^3.4.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
   },
   "dependencies": {
-    "simple-markdown": "^0.7.3"
+    "@khanacademy/simple-markdown": "^0.13.6"
   },
   "files": [
     "dist"
-  ]
+  ],
+  "packageManager": "pnpm@9.15.0+sha512.76e2379760a4328ec4415815bcd6628dee727af3779aaa4c914e3944156c4299921a89f976381ee107d41f12cfa4b66681ca9c718f0668fa0831ed4c6d8ba56c"
 }

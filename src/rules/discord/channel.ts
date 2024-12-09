@@ -1,7 +1,7 @@
-import SimpleMarkdown from 'simple-markdown';
+import SimpleMarkdown, { type ParserRule } from '@khanacademy/simple-markdown';
 import { ChannelMentionRegex } from '../../utils/regex';
 
-export const channel: SimpleMarkdown.ParserRule = {
+export const channel: ParserRule = {
   order: SimpleMarkdown.defaultRules.strong.order,
   match: (source) => ChannelMentionRegex.exec(source),
   parse: function (capture) {

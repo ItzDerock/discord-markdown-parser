@@ -1,7 +1,7 @@
-import SimpleMarkdown from 'simple-markdown';
+import SimpleMarkdown, { type ParserRule } from '@khanacademy/simple-markdown';
 import { SpoilerRegex } from '../utils/regex';
 
-export const spoiler: SimpleMarkdown.ParserRule = {
+export const spoiler: ParserRule = {
   order: 0,
   match: (source) => SpoilerRegex.exec(source),
   parse: function (capture, parse, state) {
