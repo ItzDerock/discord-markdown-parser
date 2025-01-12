@@ -453,4 +453,50 @@ describe('Parse', () => {
       },
     ]);
   });
+
+  test('GIVEN a header with "-#" signs THEN parse the subtext', () => {
+    expect(parse('-# Subtext')).toEqual([
+      {
+        type: 'subtext',
+        content: [
+          {
+            type: 'text',
+            content: 'Subtext',
+          },
+        ],
+      },
+    ]);
+    expect(parse('This is -# Not a subtext')).toEqual([
+      {
+        type: 'text',
+        content: 'This is ',
+      },
+      {
+        type: 'text',
+        content: '-',
+      },
+      {
+        type: 'text',
+        content: '# Not a subtext',
+      },
+    ]);
+    expect(parse('This is \n-# A subtext')).toEqual([
+      {
+        type: 'text',
+        content: 'This is ',
+      },
+      {
+        type: 'br',
+      },
+      {
+        type: 'subtext',
+        content: [
+          {
+            type: 'text',
+            content: 'A subtext',
+          },
+        ],
+      },
+    ]);
+  });
 });
