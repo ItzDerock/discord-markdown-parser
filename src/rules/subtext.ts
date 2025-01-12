@@ -4,7 +4,7 @@ import { SubtextRegex } from '../utils/regex';
 export const subtext: ParserRule = {
   order: 0,
   match: function (source, state) {
-    if (state.prevCapture === null || state.prevCapture[0] === '\n') {
+    if (state.prevCapture === null || state.prevCapture.slice(-1)[0] === '\n') {
       return SubtextRegex.exec(source);
     }
     return null;
