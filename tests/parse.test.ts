@@ -499,4 +499,77 @@ describe('Parse', () => {
       },
     ]);
   });
+
+  test('GIVEN a blockquote with headers THEN parse the headers and quote', () => {
+    expect(parse('> # Heading 1')).toEqual([
+      {
+        type: 'blockQuote',
+        content: [
+          {
+            type: 'heading',
+            level: 1,
+            content: [
+              {
+                type: 'text',
+                content: 'Heading 1',
+              },
+            ],
+          },
+        ],
+      },
+    ]);
+
+    expect(parse('> ## Heading 2')).toEqual([
+      {
+        type: 'blockQuote',
+        content: [
+          {
+            type: 'heading',
+            level: 2,
+            content: [
+              {
+                type: 'text',
+                content: 'Heading 2',
+              },
+            ],
+          },
+        ],
+      },
+    ]);
+
+    expect(parse('> ### Heading 3')).toEqual([
+      {
+        type: 'blockQuote',
+        content: [
+          {
+            type: 'heading',
+            level: 3,
+            content: [
+              {
+                type: 'text',
+                content: 'Heading 3',
+              },
+            ],
+          },
+        ],
+      },
+    ]);
+
+    expect(parse('> -# Subtext')).toEqual([
+      {
+        type: 'blockQuote',
+        content: [
+          {
+            type: 'subtext',
+            content: [
+              {
+                type: 'text',
+                content: 'Subtext',
+              },
+            ],
+          },
+        ],
+      },
+    ]);
+  });
 });
