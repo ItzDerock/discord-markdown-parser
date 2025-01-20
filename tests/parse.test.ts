@@ -453,4 +453,123 @@ describe('Parse', () => {
       },
     ]);
   });
+
+  test('GIVEN a header with "-#" signs THEN parse the subtext', () => {
+    expect(parse('-# Subtext')).toEqual([
+      {
+        type: 'subtext',
+        content: [
+          {
+            type: 'text',
+            content: 'Subtext',
+          },
+        ],
+      },
+    ]);
+    expect(parse('This is -# Not a subtext')).toEqual([
+      {
+        type: 'text',
+        content: 'This is ',
+      },
+      {
+        type: 'text',
+        content: '-',
+      },
+      {
+        type: 'text',
+        content: '# Not a subtext',
+      },
+    ]);
+    expect(parse('This is \n-# A subtext')).toEqual([
+      {
+        type: 'text',
+        content: 'This is ',
+      },
+      {
+        type: 'br',
+      },
+      {
+        type: 'subtext',
+        content: [
+          {
+            type: 'text',
+            content: 'A subtext',
+          },
+        ],
+      },
+    ]);
+  });
+
+  test('GIVEN a blockquote with headers THEN parse the headers and quote', () => {
+    expect(parse('> # Heading 1')).toEqual([
+      {
+        type: 'blockQuote',
+        content: [
+          {
+            type: 'heading',
+            level: 1,
+            content: [
+              {
+                type: 'text',
+                content: 'Heading 1',
+              },
+            ],
+          },
+        ],
+      },
+    ]);
+
+    expect(parse('> ## Heading 2')).toEqual([
+      {
+        type: 'blockQuote',
+        content: [
+          {
+            type: 'heading',
+            level: 2,
+            content: [
+              {
+                type: 'text',
+                content: 'Heading 2',
+              },
+            ],
+          },
+        ],
+      },
+    ]);
+
+    expect(parse('> ### Heading 3')).toEqual([
+      {
+        type: 'blockQuote',
+        content: [
+          {
+            type: 'heading',
+            level: 3,
+            content: [
+              {
+                type: 'text',
+                content: 'Heading 3',
+              },
+            ],
+          },
+        ],
+      },
+    ]);
+
+    expect(parse('> -# Subtext')).toEqual([
+      {
+        type: 'blockQuote',
+        content: [
+          {
+            type: 'subtext',
+            content: [
+              {
+                type: 'text',
+                content: 'Subtext',
+              },
+            ],
+          },
+        ],
+      },
+    ]);
+  });
 });
