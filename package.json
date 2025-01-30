@@ -1,6 +1,6 @@
 {
   "name": "discord-markdown-parser",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Parse discord-style markdown into an abstract syntax tree.",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
