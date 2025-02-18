@@ -12,7 +12,7 @@ export const HereRegex = /^@here/;
 
 export const BlockQuoteRegex = /^( *>>> ([\s\S]*))|^( *> [^\n]*(\n *> [^\n]*)*\n?)/;
 
-export const CodeBlockRegex = /^```(([a-z0-9-]+?)\n+)?\n*([^]+?)\n*```/i;
+export const CodeBlockRegex = /^```(([a-z0-9_+\-.#]+?)\n+)?\n*([^]+?)\n*```/i;
 
 export const EmoticonRegex = /^(¯\\_\(ツ\)_\/¯)/;
 
