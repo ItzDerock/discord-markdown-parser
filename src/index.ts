@@ -1,6 +1,8 @@
 import SimpleMarkdown, { type ParserRule } from '@khanacademy/simple-markdown';
 
 // import all the rules
+import { guildNavigation } from './rules/discord/guildNavigation';
+import { slashCommand } from './rules/discord/slashCommand';
 import { everyone } from './rules/discord/everyone';
 import { twemoji } from './rules/discord/twemoji';
 import { channel } from './rules/discord/channel';
@@ -51,6 +53,8 @@ export const rules: Record<string, ParserRule> = {
   here,
   twemoji,
   timestamp,
+  slashCommand,
+  guildNavigation,
 };
 
 // for use in webhooks, embeds, etc

@@ -28,6 +28,8 @@ Designed to be used for [discord-html-transcripts](https://github.com/ItzDerock/
 -   @everyone
 -   @here
 -   emojis
+-   slash command mentions
+-   guild navigation mentions
 -   & more
 
 ## Usage
