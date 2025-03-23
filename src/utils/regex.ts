@@ -1,4 +1,3 @@
-
 /**
  * Matches Discord channel mentions.
  * @example <#123456789012345678>
@@ -114,7 +113,7 @@ export const HeadingRegex = /^(#{1,3}) +([^\n]+?)(\n|$)/;
 export const SubtextRegex = /^-# +([^\n]+?)(\n|$)/;
 
 /**
- * Matches for slash command mentions,
+ * Matches for slash command mentions.
  *
  * @example </command:123456789012345678>
  *
@@ -124,3 +123,13 @@ export const SubtextRegex = /^-# +([^\n]+?)(\n|$)/;
  */
 export const SlashCommandRegex =
   /^<\/([-_'\p{L}\p{N}\p{sc=Deva}\p{sc=Thai}]{1,32}(?: [-_'\p{L}\p{N}\p{sc=Deva}\p{sc=Thai}]{1,32}){0,2})?:(\d{17,21})>$/u;
+
+/**
+ * Matches for guild navigation mentions.
+ * The `linked-roles` type adds in another opptional :ROLE-ID field.
+ *
+ * @example <12345679012345678:customize>
+ *
+ * @see {@link https://discord.com/developers/docs/reference#message-formatting-guild-navigation-types} for available types
+ */
+export const GuildNavigationRegex = /^<(\d{17,20}):(?:(customize|browse|guide)|(linked-roles)(:\d{17,20})?)>/;

@@ -607,4 +607,82 @@ describe('Parse', () => {
       },
     ]);
   });
+
+  test('GIVEN a guild navigation customize mention THEN parse the guild navigation mention', () => {
+    expect(parse('<123456789123456780:customize>')).toEqual([
+      {
+        type: 'guildNavigation',
+        id: '123456789123456780',
+        navigation: 'customize',
+      },
+    ]);
+  });
+
+  test('GIVEN a guild navigation browse mention THEN parse the guild navigation mention', () => {
+    expect(parse('<123456789123456780:browse>')).toEqual([
+      {
+        type: 'guildNavigation',
+        id: '123456789123456780',
+        navigation: 'browse',
+      },
+    ]);
+  });
+
+  test('GIVEN a guild navigation guide mention THEN parse the guild navigation mention', () => {
+    expect(parse('<123456789123456780:guide>')).toEqual([
+      {
+        type: 'guildNavigation',
+        id: '123456789123456780',
+        navigation: 'guide',
+      },
+    ]);
+  });
+
+  test('GIVEN a guild navigation linked-roles mention without role ID THEN parse the guild navigation mention', () => {
+    expect(parse('<123456789123456780:linked-roles>')).toEqual([
+      {
+        type: 'guildNavigation',
+        id: '123456789123456780',
+        navigation: 'linked-roles',
+        roleId: null,
+      },
+    ]);
+  });
+
+  test('GIVEN a guild navigation linked-roles mention with role ID THEN parse the guild navigation mention', () => {
+    expect(parse('<123456789123456780:linked-roles:987654321987654321>')).toEqual([
+      {
+        type: 'guildNavigation',
+        id: '123456789123456780',
+        navigation: 'linked-roles',
+        roleId: '987654321987654321',
+      },
+    ]);
+  });
+
+  test('GIVEN a message with mixed guild navigation mentions THEN parse them correctly', () => {
+    expect(
+      parse('Check out <123456789123456780:customize> and <987654321987654321:linked-roles:123456789123456789>')
+    ).toEqual([
+      {
+        type: 'text',
+        content: 'Check out ',
+      },
+      {
+        type: 'guildNavigation',
+        id: '123456789123456780',
+        navigation: 'customize',
+      },
+      {
+        type: 'text',
+        content: ' and ',
+      },
+      {
+        type: 'guildNavigation',
+        id: '987654321987654321',
+        navigation: 'linked-roles',
+        roleId: '123456789123456789',
+      },
+    ]);
+  });
 });
