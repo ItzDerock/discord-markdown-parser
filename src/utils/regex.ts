@@ -27,3 +27,6 @@ export const TimestampRegex = /^<t:(-?\d+)(?::(R|t|T|d|D|f|F))?>/;
 export const HeadingRegex = /^(#{1,3}) +([^\n]+?)(\n|$)/;
 
 export const SubtextRegex = /^-# +([^\n]+?)(\n|$)/;
+
+export const SlashCommandRegex =
+  /^<\/([-_'\p{L}\p{N}\p{sc=Deva}\p{sc=Thai}]{1,32}(?: [-_'\p{L}\p{N}\p{sc=Deva}\p{sc=Thai}]{1,32}){0,2})?:(\d{17,21})>$/u;

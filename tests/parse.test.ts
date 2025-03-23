@@ -572,4 +572,39 @@ describe('Parse', () => {
       },
     ]);
   });
+
+  test('GIVEN a slash command mention THEN parse the slash command mention', () => {
+    expect(parse('</command:123456789123456780>')).toEqual([
+      {
+        type: 'slashCommand',
+        fullName: 'command',
+        name: 'command',
+        subcommand: null,
+        subcommandGroup: null,
+        id: '123456789123456780',
+      },
+    ]);
+
+    expect(parse('</configure patchnotes:920459734757277696>')).toEqual([
+      {
+        type: 'slashCommand',
+        fullName: 'configure patchnotes',
+        name: 'configure',
+        subcommand: 'patchnotes',
+        subcommandGroup: null,
+        id: '920459734757277696',
+      },
+    ]);
+
+    expect(parse('</name subcommandGroup subcommand:12345678912345123123>')).toEqual([
+      {
+        type: 'slashCommand',
+        fullName: 'name subcommandGroup subcommand',
+        name: 'name',
+        subcommand: 'subcommand',
+        subcommandGroup: 'subcommandGroup',
+        id: '12345678912345123123',
+      },
+    ]);
+  });
 });
