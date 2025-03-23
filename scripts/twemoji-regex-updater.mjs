@@ -2,6 +2,9 @@ import { green, yellow } from 'colorette';
 import { rm, writeFile } from 'node:fs/promises';
 import { URL } from 'node:url';
 
+const TWEMOJI_REPO = 'jdecked/twemoji-parser';
+const TWEMOJI_BRANCH = 'main';
+
 async function importFileFromWeb({ url, temporaryFileName }) {
   const body = await fetch(url).then((response) => response.text());
 
@@ -18,7 +21,7 @@ async function importFileFromWeb({ url, temporaryFileName }) {
 const filePrefix = [
   '/**',
   ' * Regex that can capture a Twemoji (Twitter Emoji)',
-  ' * @raw {@linkplain https://github.com/twitter/twemoji-parser/blob/master/src/lib/regex.js See official source code}',
+  ` * @raw {@linkplain https://github.com/${TWEMOJI_REPO}/blob/${TWEMOJI_BRANCH}/src/lib/regex.js See official source code}`,
   ' */',
   'export const TwemojiRegex =',
   '\t',
@@ -30,7 +33,7 @@ const twemojiRegexFileUrl = new URL('../src/utils/twemojiRegex.ts', import.meta.
 const oneMonthAgo = Date.now() - 1000 * 60 * 60 * 24 * 30;
 const timestamp = new Date(oneMonthAgo).toISOString();
 
-const url = new URL('https://api.github.com/repos/twitter/twemoji-parser/commits');
+const url = new URL(`https://api.github.com/repos/${TWEMOJI_REPO}/commits`);
 url.searchParams.append('path', 'src/lib/regex.js');
 url.searchParams.append('since', timestamp);
 
@@ -48,7 +51,7 @@ if (data.sha === null || data.sha === ciData.twemojiRegexLastSha) {
 }
 
 const { default: regexFromWeb } = await importFileFromWeb({
-  url: 'https://raw.githubusercontent.com/twitter/twemoji-parser/master/src/lib/regex.js',
+  url: `https://raw.githubusercontent.com/${TWEMOJI_REPO}/${TWEMOJI_BRANCH}/src/lib/regex.js`,
   temporaryFileName: 'regex.mjs',
 });
 
