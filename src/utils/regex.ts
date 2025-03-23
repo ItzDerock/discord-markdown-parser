@@ -94,7 +94,7 @@ export const TextRegex = /^[\s\S]+?(?=[^0-9A-Za-z\s]|\n\n|\n|\w+:\S|$)/;
  *
  * @example <t:123456> or <t:123456:t> for specific formats
  */
-export const TimestampRegex = /^<t:(-?\d+)(?::(R|t|T|d|D|f|F))?>/i;
+export const TimestampRegex = /^<t:(-?\d+)(?::(R|t|T|d|D|f|F))?>/;
 
 /**
  * Matches markdown headings (H1-H3 level).
