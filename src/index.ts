@@ -30,6 +30,7 @@ export const rules: Record<string, ParserRule> = {
   codeBlock,
   newline: SimpleMarkdown.defaultRules.newline,
   escape: SimpleMarkdown.defaultRules.escape,
+  link: SimpleMarkdown.defaultRules.link,
   autolink,
   url,
   em,
