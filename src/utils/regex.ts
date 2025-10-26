@@ -122,7 +122,7 @@ export const SubtextRegex = /^-# +([^\n]+?)(\n|$)/;
  * Commands can also be nested up to 3 times (</command group subcommand:id>)
  */
 export const SlashCommandRegex =
-  /^<\/([-_'\p{L}\p{N}\p{sc=Deva}\p{sc=Thai}]{1,32}(?: [-_'\p{L}\p{N}\p{sc=Deva}\p{sc=Thai}]{1,32}){0,2})?:(\d{17,21})>$/u;
+  /^<\/([-_'\p{L}\p{N}\p{sc=Deva}\p{sc=Thai}]{1,32}(?: [-_'\p{L}\p{N}\p{sc=Deva}\p{sc=Thai}]{1,32}){0,2})?:(\d{17,21})>/u;
 
 /**
  * Matches for guild navigation mentions.
