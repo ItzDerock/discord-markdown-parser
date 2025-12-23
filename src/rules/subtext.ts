@@ -1,4 +1,4 @@
-import SimpleMarkdown, { type ParserRule } from '@khanacademy/simple-markdown';
+import SimpleMarkdown, { type ParserRule } from '../simple-markdown';
 import { SubtextRegex } from '../utils/regex';
 
 export const subtext: ParserRule = {

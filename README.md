@@ -11,26 +11,26 @@ Designed to be used for [discord-html-transcripts](https://github.com/ItzDerock/
 
 `discord-markdown-parser` will parse any given string into an [AST tree](https://en.wikipedia.org/wiki/Abstract_syntax_tree) and supports:
 
--   links
--   block quotes
--   inline quotes
--   code blocks
--   inline code
--   italics (em)
--   spoilers
--   timestamps
--   bold
--   strikethrough
--   underline
--   channel mentions
--   user mentions
--   role mentions
--   @everyone
--   @here
--   emojis
--   slash command mentions
--   guild navigation mentions
--   & more
+- links
+- block quotes
+- inline quotes
+- code blocks
+- inline code
+- italics (em)
+- spoilers
+- timestamps
+- bold
+- strikethrough
+- underline
+- channel mentions
+- user mentions
+- role mentions
+- @everyone
+- @here
+- emojis
+- slash command mentions
+- guild navigation mentions
+- & more
 
 ## Usage
 
@@ -54,7 +54,7 @@ const parsed = parse(input, type);
 
 ```js
 // you can import the default rules using
-import { rules } from 'discord-markdown-parser';
+import { SimpleMarkdown, rules } from 'discord-markdown-parser';
 
 // and you can add your own rules
 const newRules = {
@@ -63,9 +63,6 @@ const newRules = {
         ...
     } // see simple-markdown documentation for details
 };
-
-// import simpleMarkdown
-import SimpleMarkdown from '@khanacademy/simple-markdown';
 
 // and create the parser
 const parser = SimpleMarkdown.parserFor(newRules);

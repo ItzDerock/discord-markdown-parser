@@ -36,9 +36,6 @@
     "typescript": "^5.9.3",
     "vitest": "^4.0.16"
   },
-  "dependencies": {
-    "@khanacademy/simple-markdown": "^2.1.4"
-  },
   "files": [
     "dist"
   ],

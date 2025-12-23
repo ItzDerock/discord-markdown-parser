@@ -1,4 +1,4 @@
-import SimpleMarkdown, { type ParserRule } from '@khanacademy/simple-markdown';
+import SimpleMarkdown, { type ParserRule } from '../../simple-markdown';
 import { TwemojiRegex } from '../../utils/twemojiRegex';
 
 export const twemoji: ParserRule = {

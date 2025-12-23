@@ -35,9 +35,6 @@ type UnTypedASTNode = {
 
 type ASTNode = SingleASTNode | Array<SingleASTNode>;
 
-type ReactElement = React.ReactElement<any>;
-type ReactElements = React.ReactNode;
-
 type Parser = (source: string, state?: State | null | undefined) => Array<SingleASTNode>;
 
 type ParseFunction = (capture: Capture, nestedParse: Parser, state: State) => UnTypedASTNode | ASTNode;
@@ -50,8 +47,6 @@ type NodeOutput<Result> = (node: SingleASTNode, nestedOutput: Output<Result>, st
 
 type ArrayNodeOutput<Result> = (node: Array<SingleASTNode>, nestedOutput: Output<Result>, state: State) => Result;
 
-type ReactOutput = Output<ReactElements>;
-type ReactNodeOutput = NodeOutput<ReactElements>;
 type HtmlOutput = Output<string>;
 type HtmlNodeOutput = NodeOutput<string>;
 
@@ -69,23 +64,12 @@ type SingleNodeParserRule = {
   readonly parse: SingleNodeParseFunction;
 };
 
-type ReactOutputRule = {
-  // we allow null because some rules are never output results, and that's
-  // legal as long as no parsers return an AST node matching that rule.
-  // We don't use ? because this makes it be explicitly defined as either
-  // a valid function or null, so it can't be forgotten.
-  readonly react: ReactNodeOutput | null;
-};
-
 type HtmlOutputRule = {
   readonly html: HtmlNodeOutput | null;
 };
 
 type ArrayRule = {
-  // @ts-expect-error - TS2411 - Property 'react' of type 'ArrayNodeOutput<ReactNode> | undefined' is not assignable to 'string' index type 'ArrayNodeOutput<any>'.
-  readonly react?: ArrayNodeOutput<ReactElements>;
-  // @ts-expect-error - TS2411 - Property 'html' of type 'ArrayNodeOutput<string> | undefined' is not assignable to 'string' index type 'ArrayNodeOutput<any>'.
-  readonly html?: ArrayNodeOutput<string>;
+  readonly html: ArrayNodeOutput<string>;
   readonly [key: string]: ArrayNodeOutput<any>;
 };
 
@@ -105,13 +89,7 @@ type Rules<OutputRule> = {
   readonly Array?: ArrayRule;
   readonly [type: string]: ParserRule & OutputRule;
 };
-type ReactRules = {
-  // @ts-expect-error - TS2411 - Property 'Array' of type '{ readonly react: ArrayNodeOutput<ReactNode>; } | undefined' is not assignable to 'string' index type 'ParserRule & ReactOutputRule'.
-  readonly Array?: {
-    readonly react: ArrayNodeOutput<ReactElements>;
-  };
-  readonly [type: string]: ParserRule & ReactOutputRule;
-};
+
 type HtmlRules = {
   // @ts-expect-error - TS2411 - Property 'Array' of type '{ readonly html: ArrayNodeOutput<string>; } | undefined' is not assignable to 'string' index type 'ParserRule & HtmlOutputRule'.
   readonly Array?: {
@@ -123,27 +101,17 @@ type HtmlRules = {
 // We want to clarify our defaultRules types a little bit more so clients can
 // reuse defaultRules built-ins. So we make some stronger guarantess when
 // we can:
-type NonNullReactOutputRule = {
-  readonly react: ReactNodeOutput;
-};
-type ElementReactOutputRule = {
-  readonly react: NodeOutput<ReactElement>;
-};
-type TextReactOutputRule = {
-  readonly react: NodeOutput<string>;
-};
 type NonNullHtmlOutputRule = {
   readonly html: HtmlNodeOutput;
 };
 
-type DefaultInRule = SingleNodeParserRule & ReactOutputRule & HtmlOutputRule;
-type TextInOutRule = SingleNodeParserRule & TextReactOutputRule & NonNullHtmlOutputRule;
-type LenientInOutRule = SingleNodeParserRule & NonNullReactOutputRule & NonNullHtmlOutputRule;
-type DefaultInOutRule = SingleNodeParserRule & ElementReactOutputRule & NonNullHtmlOutputRule;
+type DefaultInRule = SingleNodeParserRule & HtmlOutputRule;
+type TextInOutRule = SingleNodeParserRule & NonNullHtmlOutputRule;
+type LenientInOutRule = SingleNodeParserRule & NonNullHtmlOutputRule;
+type DefaultInOutRule = SingleNodeParserRule & NonNullHtmlOutputRule;
 
 type DefaultRules = {
   readonly Array: {
-    readonly react: ArrayNodeOutput<ReactElements>;
     readonly html: ArrayNodeOutput<string>;
   };
   readonly heading: DefaultInOutRule;
@@ -301,11 +269,8 @@ var parserFor = function (rules: ParserRules, defaultState?: State | null): Pars
           // the initial quality is NaN (that's why there's the
           // condition negation).
           if (!(currQuality <= quality)) {
-            // @ts-expect-error - TS2322 - Type 'string' is not assignable to type 'null'.
             ruleType = currRuleType;
-            // @ts-expect-error - TS2322 - Type 'ParserRule' is not assignable to type 'null'.
             rule = currRule;
-            // @ts-expect-error - TS2322 - Type 'Capture' is not assignable to type 'null'.
             capture = currCapture;
             quality = currQuality;
           }
@@ -344,7 +309,6 @@ var parserFor = function (rules: ParserRules, defaultState?: State | null): Pars
             source
         );
       }
-      // @ts-expect-error - TS2339 - Property 'index' does not exist on type 'never'.
       if (capture.index) {
         // If present and non-zero, i.e. a non-^ regexp result:
         throw new Error(
@@ -354,7 +318,6 @@ var parserFor = function (rules: ParserRules, defaultState?: State | null): Pars
         );
       }
 
-      // @ts-expect-error - TS2339 - Property 'parse' does not exist on type 'never'.
       var parsed = rule.parse(capture, nestedParse, state);
       // We maintain the same object here so that rules can
       // store references to the objects they return and
@@ -374,7 +337,8 @@ var parserFor = function (rules: ParserRules, defaultState?: State | null): Pars
         if (parsed.type == null) {
           parsed.type = ruleType;
         }
-        result.push(parsed);
+
+        result.push(parsed as SingleASTNode);
       }
 
       state.prevCapture = capture;
@@ -445,24 +409,6 @@ var TYPE_SYMBOL =
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     Symbol.for('react.element')) ||
   0xeac7;
-
-var reactElement = function (
-  type: string,
-  key: string | number | null | undefined,
-  props: {
-    [key: string]: any;
-  }
-): ReactElement {
-  var element: ReactElement = {
-    $$typeof: TYPE_SYMBOL,
-    type: type,
-    key: key == null ? undefined : key,
-    ref: null,
-    props: props,
-    _owner: null,
-  } as any;
-  return element;
-};
 
 /** Returns a closed HTML tag.
  * @param {string} tagName - Name of HTML tag (eg. "em" or "a")
@@ -539,7 +485,7 @@ var SANITIZE_TEXT_CODES = {
 
 var sanitizeText = function (text: Attr): string {
   return String(text).replace(SANITIZE_TEXT_R, function (chr) {
-    return SANITIZE_TEXT_CODES[chr];
+    return SANITIZE_TEXT_CODES[chr as keyof typeof SANITIZE_TEXT_CODES];
   });
 };
 
@@ -771,32 +717,6 @@ var currOrder = 0;
 
 var defaultRules: DefaultRules = {
   Array: {
-    react: function (arr, output, state) {
-      var oldKey = state.key;
-      var result: Array<ReactElements> = [];
-
-      // map output over the ast, except group any text
-      // nodes together into a single string output.
-      for (var i = 0, key = 0; i < arr.length; i++, key++) {
-        // `key` is our numerical `state.key`, which we increment for
-        // every output node, but don't change for joined text nodes.
-        // (i, however, must change for joined text nodes)
-        state.key = '' + i;
-
-        var node = arr[i];
-        if (node.type === 'text') {
-          node = { type: 'text', content: node.content };
-          for (; i + 1 < arr.length && arr[i + 1].type === 'text'; i++) {
-            node.content += arr[i + 1].content;
-          }
-        }
-
-        result.push(output(node, state));
-      }
-
-      state.key = oldKey;
-      return result;
-    },
     html: function (arr, output, state) {
       var result = '';
 
@@ -825,11 +745,7 @@ var defaultRules: DefaultRules = {
         content: parseInline(parse, capture[2].trim(), state),
       };
     },
-    react: function (node, output, state) {
-      return reactElement('h' + node.level, state.key, {
-        children: output(node.content, state),
-      });
-    },
+
     html: function (node, output, state) {
       return htmlTag('h' + node.level, output(node.content, state));
     },
@@ -838,7 +754,6 @@ var defaultRules: DefaultRules = {
     order: currOrder++,
     match: blockRegex(TABLES.NPTABLE_REGEX),
     parse: TABLES.parseNpTable,
-    react: null,
     html: null,
   },
   lheading: {
@@ -851,16 +766,12 @@ var defaultRules: DefaultRules = {
         content: parseInline(parse, capture[1], state),
       };
     },
-    react: null,
     html: null,
   },
   hr: {
     order: currOrder++,
     match: blockRegex(/^( *[-*_]){3,} *(?:\n *)+\n/),
     parse: ignoreCapture,
-    react: function (node, output, state) {
-      return reactElement('hr', state.key, { 'aria-hidden': true });
-    },
     html: function (node, output, state) {
       return '<hr aria-hidden="true">';
     },
@@ -874,16 +785,6 @@ var defaultRules: DefaultRules = {
         lang: undefined,
         content: content,
       };
-    },
-    react: function (node, output, state) {
-      var className = node.lang ? 'markdown-code-' + node.lang : undefined;
-
-      return reactElement('pre', state.key, {
-        children: reactElement('code', null, {
-          className: className,
-          children: node.content,
-        }),
-      });
     },
     html: function (node, output, state) {
       var className = node.lang ? 'markdown-code-' + node.lang : undefined;
@@ -904,7 +805,6 @@ var defaultRules: DefaultRules = {
         content: capture[3],
       };
     },
-    react: null,
     html: null,
   },
   blockQuote: {
@@ -916,11 +816,7 @@ var defaultRules: DefaultRules = {
         content: parse(content, state),
       };
     },
-    react: function (node, output, state) {
-      return reactElement('blockquote', state.key, {
-        children: output(node.content, state),
-      });
-    },
+
     html: function (node, output, state) {
       return htmlTag('blockquote', output(node.content, state));
     },
@@ -1026,18 +922,6 @@ var defaultRules: DefaultRules = {
         items: itemContent,
       };
     },
-    react: function (node, output, state) {
-      var ListWrapper = node.ordered ? 'ol' : 'ul';
-
-      return reactElement(ListWrapper, state.key, {
-        start: node.start,
-        children: node.items.map(function (item: ASTNode, i: number) {
-          return reactElement('li', '' + i, {
-            children: output(item, state),
-          });
-        }),
-      });
-    },
     html: function (node, output, state) {
       var listItems = node.items
         .map(function (item: ASTNode) {
@@ -1097,9 +981,6 @@ var defaultRules: DefaultRules = {
         title: title,
       };
     },
-    react: function () {
-      return null;
-    },
     html: function () {
       return '';
     },
@@ -1108,49 +989,6 @@ var defaultRules: DefaultRules = {
     order: currOrder++,
     match: blockRegex(TABLES.TABLE_REGEX),
     parse: TABLES.parseTable,
-    react: function (node, output, state) {
-      var getStyle = function (colIndex: number): {
-        [attr: string]: Attr;
-      } {
-        return node.align[colIndex] == null
-          ? {}
-          : {
-              textAlign: node.align[colIndex],
-            };
-      };
-
-      var headers = node.header.map(function (content: ASTNode, i: number) {
-        return reactElement('th', '' + i, {
-          style: getStyle(i),
-          scope: 'col',
-          children: output(content, state),
-        });
-      });
-
-      var rows = node.cells.map(function (row: Array<ASTNode>, r: number) {
-        return reactElement('tr', '' + r, {
-          children: row.map(function (content: ASTNode, c: number) {
-            return reactElement('td', '' + c, {
-              style: getStyle(c),
-              children: output(content, state),
-            });
-          }),
-        });
-      });
-
-      return reactElement('table', state.key, {
-        children: [
-          reactElement('thead', 'thead', {
-            children: reactElement('tr', null, {
-              children: headers,
-            }),
-          }),
-          reactElement('tbody', 'tbody', {
-            children: rows,
-          }),
-        ],
-      });
-    },
     html: function (node, output, state) {
       var getStyle = function (colIndex: number): string {
         return node.align[colIndex] == null ? '' : 'text-align:' + node.align[colIndex] + ';';
@@ -1189,9 +1027,6 @@ var defaultRules: DefaultRules = {
     order: currOrder++,
     match: blockRegex(/^(?:\n *)*\n/),
     parse: ignoreCapture,
-    react: function (node, output, state) {
-      return '\n';
-    },
     html: function (node, output, state) {
       return '\n';
     },
@@ -1200,12 +1035,6 @@ var defaultRules: DefaultRules = {
     order: currOrder++,
     match: blockRegex(/^((?:[^\n]|\n(?! *\n))+)(?:\n *)+\n/),
     parse: parseCaptureInline,
-    react: function (node, output, state) {
-      return reactElement('div', state.key, {
-        className: 'paragraph',
-        children: output(node.content, state),
-      });
-    },
     html: function (node, output, state) {
       var attributes = {
         class: 'paragraph',
@@ -1226,7 +1055,6 @@ var defaultRules: DefaultRules = {
         content: capture[1],
       };
     },
-    react: null,
     html: null,
   },
   tableSeparator: {
@@ -1239,10 +1067,6 @@ var defaultRules: DefaultRules = {
     },
     parse: function () {
       return { type: 'tableSeparator' };
-    },
-    // These shouldn't be reached, but in case they are, be reasonable:
-    react: function () {
-      return ' | ';
     },
     html: function () {
       return ' &vert; ';
@@ -1263,7 +1087,6 @@ var defaultRules: DefaultRules = {
         target: capture[1],
       };
     },
-    react: null,
     html: null,
   },
   mailto: {
@@ -1289,7 +1112,6 @@ var defaultRules: DefaultRules = {
         target: target,
       };
     },
-    react: null,
     html: null,
   },
   url: {
@@ -1308,7 +1130,6 @@ var defaultRules: DefaultRules = {
         title: undefined,
       };
     },
-    react: null,
     html: null,
   },
   link: {
@@ -1321,13 +1142,6 @@ var defaultRules: DefaultRules = {
         title: capture[3],
       };
       return link;
-    },
-    react: function (node, output, state) {
-      return reactElement('a', state.key, {
-        href: sanitizeUrl(node.target),
-        title: node.title,
-        children: output(node.content, state),
-      });
     },
     html: function (node, output, state) {
       var attributes = {
@@ -1348,13 +1162,6 @@ var defaultRules: DefaultRules = {
         title: capture[3],
       };
       return image;
-    },
-    react: function (node, output, state) {
-      return reactElement('img', state.key, {
-        src: sanitizeUrl(node.target),
-        alt: node.alt,
-        title: node.title,
-      });
     },
     html: function (node, output, state) {
       var attributes = {
@@ -1384,7 +1191,6 @@ var defaultRules: DefaultRules = {
         content: parse(capture[1], state),
       });
     },
-    react: null,
     html: null,
   },
   refimage: {
@@ -1405,7 +1211,6 @@ var defaultRules: DefaultRules = {
         alt: capture[1],
       });
     },
-    react: null,
     html: null,
   },
   em: {
@@ -1447,11 +1252,6 @@ var defaultRules: DefaultRules = {
         content: parse(capture[2] || capture[1], state),
       };
     },
-    react: function (node, output, state) {
-      return reactElement('em', state.key, {
-        children: output(node.content, state),
-      });
-    },
     html: function (node, output, state) {
       return htmlTag('em', output(node.content, state));
     },
@@ -1464,11 +1264,6 @@ var defaultRules: DefaultRules = {
       return capture[0].length + 0.1;
     },
     parse: parseCaptureInline,
-    react: function (node, output, state) {
-      return reactElement('strong', state.key, {
-        children: output(node.content, state),
-      });
-    },
     html: function (node, output, state) {
       return htmlTag('strong', output(node.content, state));
     },
@@ -1481,11 +1276,6 @@ var defaultRules: DefaultRules = {
       return capture[0].length;
     },
     parse: parseCaptureInline,
-    react: function (node, output, state) {
-      return reactElement('u', state.key, {
-        children: output(node.content, state),
-      });
-    },
     html: function (node, output, state) {
       return htmlTag('u', output(node.content, state));
     },
@@ -1494,11 +1284,6 @@ var defaultRules: DefaultRules = {
     order: currOrder++,
     match: inlineRegex(/^~~(?=\S)((?:\\[\s\S]|~(?!~)|[^\s~\\]|\s(?!~~))+?)~~/),
     parse: parseCaptureInline,
-    react: function (node, output, state) {
-      return reactElement('del', state.key, {
-        children: output(node.content, state),
-      });
-    },
     html: function (node, output, state) {
       return htmlTag('del', output(node.content, state));
     },
@@ -1511,11 +1296,6 @@ var defaultRules: DefaultRules = {
         content: capture[2].replace(INLINE_CODE_ESCAPE_BACKTICKS_R, '$1'),
       };
     },
-    react: function (node, output, state) {
-      return reactElement('code', state.key, {
-        children: node.content,
-      });
-    },
     html: function (node, output, state) {
       return htmlTag('code', sanitizeText(node.content));
     },
@@ -1524,9 +1304,6 @@ var defaultRules: DefaultRules = {
     order: currOrder++,
     match: anyScopeRegex(/^ {2,}\n/),
     parse: ignoreCapture,
-    react: function (node, output, state) {
-      return reactElement('br', state.key, EMPTY_PROPS);
-    },
     html: function (node, output, state) {
       return '<br>';
     },
@@ -1542,9 +1319,6 @@ var defaultRules: DefaultRules = {
       return {
         content: capture[0],
       };
-    },
-    react: function (node, output, state) {
-      return node.content;
     },
     html: function (node, output, state) {
       return sanitizeText(node.content);
@@ -1565,41 +1339,6 @@ var ruleOutput = function <Rule>(rules: OutputRules<Rule>, property: keyof Rule)
     return rules[ast.type][property](ast, outputFunc, state);
   };
   return nestedRuleOutput;
-};
-
-/** (deprecated)
- */
-var reactFor = function (outputFunc: ReactNodeOutput): ReactOutput {
-  var nestedOutput: ReactOutput = function (ast, state) {
-    state = state || {};
-    if (Array.isArray(ast)) {
-      var oldKey = state.key;
-      var result: Array<ReactElements> = [];
-
-      // map nestedOutput over the ast, except group any text
-      // nodes together into a single string output.
-      var lastResult = null;
-      for (var i = 0; i < ast.length; i++) {
-        state.key = '' + i;
-        var nodeOut = nestedOutput(ast[i], state);
-        if (typeof nodeOut === 'string' && typeof lastResult === 'string') {
-          // @ts-expect-error - TS2322 - Type 'string' is not assignable to type 'null'.
-          lastResult = lastResult + nodeOut;
-          result[result.length - 1] = lastResult;
-        } else {
-          result.push(nodeOut);
-          // @ts-expect-error - TS2322 - Type 'ReactNode' is not assignable to type 'null'.
-          lastResult = nodeOut;
-        }
-      }
-
-      state.key = oldKey;
-      return result;
-    } else {
-      return outputFunc(ast, nestedOutput, state);
-    }
-  };
-  return nestedOutput;
 };
 
 /** (deprecated)
@@ -1689,30 +1428,10 @@ var defaultImplicitParse = function (source: string, state?: State | null): Arra
   return defaultRawParse(source, state);
 };
 
-var defaultReactOutput: ReactOutput = outputFor(defaultRules, 'react');
 var defaultHtmlOutput: HtmlOutput = outputFor(defaultRules, 'html');
-
-var markdownToReact = function (source: string, state?: State | null): ReactElements {
-  return defaultReactOutput(defaultBlockParse(source, state), state);
-};
 
 var markdownToHtml = function (source: string, state?: State | null): string {
   return defaultHtmlOutput(defaultBlockParse(source, state), state);
-};
-
-// TODO: This needs definition
-type Props = any;
-var ReactMarkdown = function (props: Props): React.ReactElement {
-  var divProps: Record<string, any> = {};
-
-  for (var prop in props) {
-    if (prop !== 'source' && Object.prototype.hasOwnProperty.call(props, prop)) {
-      divProps[prop] = props[prop];
-    }
-  }
-  divProps.children = markdownToReact(props.source);
-
-  return reactElement('div', null, divProps);
 };
 
 type Exports = {
@@ -1724,21 +1443,17 @@ type Exports = {
     defaultState?: State | null | undefined
   ) => Output<any>;
   readonly ruleOutput: <Rule>(rules: OutputRules<Rule>, param: keyof Rule) => NodeOutput<any>;
-  readonly reactFor: (arg1: ReactNodeOutput) => ReactOutput;
   readonly htmlFor: (arg1: HtmlNodeOutput) => HtmlOutput;
   readonly inlineRegex: (regex: RegExp) => MatchFunction;
   readonly blockRegex: (regex: RegExp) => MatchFunction;
   readonly anyScopeRegex: (regex: RegExp) => MatchFunction;
   readonly parseInline: (parse: Parser, content: string, state: State) => ASTNode;
   readonly parseBlock: (parse: Parser, content: string, state: State) => ASTNode;
-  readonly markdownToReact: (source: string, state?: State | null | undefined) => ReactElements;
   readonly markdownToHtml: (source: string, state?: State | null | undefined) => string;
-  readonly ReactMarkdown: (props: { source: string; [key: string]: any }) => ReactElement;
   readonly defaultRawParse: (source: string, state?: State | null | undefined) => Array<SingleASTNode>;
   readonly defaultBlockParse: (source: string, state?: State | null | undefined) => Array<SingleASTNode>;
   readonly defaultInlineParse: (source: string, state?: State | null | undefined) => Array<SingleASTNode>;
   readonly defaultImplicitParse: (source: string, state?: State | null | undefined) => Array<SingleASTNode>;
-  readonly defaultReactOutput: ReactOutput;
   readonly defaultHtmlOutput: HtmlOutput;
   readonly preprocess: (source: string) => string;
   readonly sanitizeText: (text: Attr) => string;
@@ -1750,13 +1465,6 @@ type Exports = {
     attributes?: Partial<Record<any, Attr | null | undefined>> | null | undefined,
     isClosed?: boolean | null | undefined
   ) => string;
-  readonly reactElement: (
-    type: string,
-    key: string | null,
-    props: {
-      [key: string]: any;
-    }
-  ) => ReactElement;
   /**
    * defaultParse is deprecated, please use `defaultImplicitParse`
    * @deprecated
@@ -1775,7 +1483,6 @@ export type {
   State,
   Parser,
   Output,
-  ReactOutput,
   HtmlOutput,
   // Most of the following types should be considered experimental and
   // subject to change or change names. Again, they shouldn't be necessary,
@@ -1787,16 +1494,13 @@ export type {
   ParseFunction,
   NodeOutput,
   ArrayNodeOutput,
-  ReactNodeOutput,
   // Single rules:
   ParserRule,
-  ReactOutputRule,
   HtmlOutputRule,
   // Sets of rules:
   ParserRules,
   OutputRules,
   Rules,
-  ReactRules,
   HtmlRules,
   SingleASTNode,
 };
@@ -1813,15 +1517,12 @@ var SimpleMarkdown: Exports = {
   parseBlock: parseBlock,
 
   // default wrappers:
-  markdownToReact: markdownToReact,
   markdownToHtml: markdownToHtml,
-  ReactMarkdown: ReactMarkdown,
 
   defaultBlockParse: defaultBlockParse,
   defaultInlineParse: defaultInlineParse,
   defaultImplicitParse: defaultImplicitParse,
 
-  defaultReactOutput: defaultReactOutput,
   defaultHtmlOutput: defaultHtmlOutput,
 
   preprocess: preprocess,
@@ -1829,12 +1530,10 @@ var SimpleMarkdown: Exports = {
   sanitizeUrl: sanitizeUrl,
   unescapeUrl: unescapeUrl,
   htmlTag: htmlTag,
-  reactElement: reactElement,
 
   // deprecated:
   defaultRawParse: defaultRawParse,
   ruleOutput: ruleOutput,
-  reactFor: reactFor,
   htmlFor: htmlFor,
 
   defaultParse: function (...args) {
