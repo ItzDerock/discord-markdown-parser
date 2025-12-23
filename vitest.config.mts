@@ -8,6 +8,7 @@ export default defineConfig({
       enabled: true,
       reporter: ['text', 'lcov', 'clover'],
       include: ['src'],
+      exclude: ['src/simple-markdown'],
     },
   },
 });
