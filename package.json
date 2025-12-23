@@ -36,27 +36,8 @@
     "typescript": "^5.9.3",
     "vitest": "^4.0.16"
   },
-  "dependencies": {
-    "@khanacademy/simple-markdown": "^2.1.4"
-  },
   "files": [
     "dist"
   ],
-  "packageManager": "pnpm@9.15.0",
-  "peerDependencies": {
-    "react": "^18.0.0 || ^19.0.0"
-  },
-  "peerDependenciesMeta": {
-    "react": {
-      "optional": true
-    }
-  },
-  "pnpm": {
-    "peerDependencyRules": {
-      "allowedVersions": {
-        "react": "19",
-        "react-dom": "19"
-      }
-    }
-  }
+  "packageManager": "pnpm@9.15.0"
 }

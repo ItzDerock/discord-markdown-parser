@@ -1,4 +1,6 @@
-import SimpleMarkdown, { type ParserRule } from '@khanacademy/simple-markdown';
+import SimpleMarkdown, { type ParserRule } from './simple-markdown';
+
+export { SimpleMarkdown };
 
 // import all the rules
 import { guildNavigation } from './rules/discord/guildNavigation';

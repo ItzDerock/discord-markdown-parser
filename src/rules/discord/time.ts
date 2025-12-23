@@ -1,4 +1,4 @@
-import SimpleMarkdown, { ParserRule } from '@khanacademy/simple-markdown';
+import SimpleMarkdown, { ParserRule } from '../../simple-markdown';
 import { TimestampRegex } from '../../utils/regex';
 
 export const timestamp: ParserRule = {
